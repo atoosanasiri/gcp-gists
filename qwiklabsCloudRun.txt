@@ -1,0 +1,50 @@
+Workign with APS
+Just loved it:
+gcloud services enable run.googleapis.com
+gcloud services list --available
+
+qwiklabs cloud run:
+--------------------------------------------------
+mkdir helloworld-nodejs
+cd helloworld-nodejs
+nano package.json 
+nano index.js
+nano Doclerfilr
+from here: https://cloud.google.com/run/docs/quickstarts/build-and-deploy
+
+
+export GCR_REPO=gcr.io/$GOOGLE_CLOUD_PROJECT/helloworld
+gcloud config get-value project
+OR
+gcloud config get-value project
+gcloud builds submit --tag gcr.io/[PROJECT-ID]/helloworld
+
+gcloud builds submit --tag $GCR_REPO
+docker run -d -p 8080:8080 $GCR_REPO
+gcloud beta run deploy --image $GCR_REPO
+gcloud run deploy --image  $GCR_REPO --platform managed
+
+qwiklabs fucntions
+-----------------------------------------------------
+https://cloud.google.com/functions/docs/first-python
+gcloud components update
+mkdir gcf-helloworld
+cd gcf-helloworld
+
+export BUCKET=gs://$GOOGLE_CLOUD_PROJECT
+gsutil mb -p ${BUCKET}
+
+nano index.js
+gcloud functions deploy helloWorld --stage-bucket $BUCKET --trigger-topic hello_world --runtime nodejs8
+DATA=$(printf 'Hello World!' |base64)
+gcloud functions call helloWorld --data '{"data":"'$DATA'"}'
+
+nano python.main
+echo "Flask==1.0.2" > requirements.txt
+gcloud functions deploy hello_http --runtime python38 --trigger-http --allow-unauthenticated
+
+gcloud function describe helloWorld
+gcloud functions logs read helloWorld
+
+
+
